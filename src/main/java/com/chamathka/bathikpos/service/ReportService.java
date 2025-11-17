@@ -52,7 +52,7 @@ public class ReportService {
                         variant.getAttributeSize(),
                         variant.getAttributeColor(),
                         variant.getQuantityInStock(),
-                        variant.getReorderLevel(),
+                        variant.getLowStockThreshold(),
                         variant.getSellingPrice()
                 ))
                 .sorted(Comparator.comparingInt(LowStockReportItem::getCurrentStock))
