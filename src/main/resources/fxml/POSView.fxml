@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chamathka.bathikpos.controller.POSController"
+            prefWidth="1400"
+            prefHeight="800"
+            style="-fx-background-color: #f5f5f5;">
+
+    <!-- Top Bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: white; -fx-padding: 15 20;">
+            <JFXButton text="← Back to Dashboard"
+                      onAction="#handleBackToDashboard"
+                      style="-fx-background-color: #e0e7ff; -fx-text-fill: #4338ca; -fx-background-radius: 5;">
+                <font>
+                    <Font name="System Bold" size="12"/>
+                </font>
+            </JFXButton>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label text="💰 Point of Sale" textFill="#1f2937">
+                <font>
+                    <Font name="System Bold" size="22"/>
+                </font>
+            </Label>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="cashierLabel" textFill="#6b7280">
+                <font>
+                    <Font size="12"/>
+                </font>
+            </Label>
+        </HBox>
+    </top>
+
+    <!-- Main Content - 3-Panel Layout -->
+    <center>
+        <HBox spacing="0" style="-fx-background-color: #f5f5f5;">
+
+            <!-- LEFT PANEL: Product Selection -->
+            <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: white;" prefWidth="450">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Products" textFill="#1f2937">
+                        <font>
+                            <Font name="System Bold" size="16"/>
+                        </font>
+                    </Label>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <JFXTextField fx:id="productSearchField"
+                                 promptText="Search products..."
+                                 prefWidth="200"
+                                 onKeyReleased="#handleProductSearch">
+                        <font>
+                            <Font size="12"/>
+                        </font>
+                    </JFXTextField>
+                </HBox>
+
+                <Separator/>
+
+                <!-- Product List -->
+                <TableView fx:id="productTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn text="Product" prefWidth="200">
+                            <cellFactory>
+                                <fx:reference source="productNameCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+
+                        <TableColumn text="SKU" prefWidth="100">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="itemCode"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Price" prefWidth="80">
+                            <cellFactory>
+                                <fx:reference source="priceCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Stock" prefWidth="50">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="quantityInStock"/>
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                    <placeholder>
+                        <Label text="No products available"/>
+                    </placeholder>
+                </TableView>
+
+                <JFXButton text="➕ Add to Cart"
+                          onAction="#handleAddToCart"
+                          style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-background-radius: 5;"
+                          maxWidth="Infinity"
+                          prefHeight="40">
+                    <font>
+                        <Font name="System Bold" size="14"/>
+                    </font>
+                </JFXButton>
+            </VBox>
+
+            <!-- CENTER PANEL: Shopping Cart -->
+            <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: #fafafa;" prefWidth="500" HBox.hgrow="ALWAYS">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Current Bill" textFill="#1f2937">
+                        <font>
+                            <Font name="System Bold" size="16"/>
+                        </font>
+                    </Label>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <JFXButton text="🗑 Clear Cart"
+                              onAction="#handleClearCart"
+                              style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 3;">
+                        <font>
+                            <Font size="11"/>
+                        </font>
+                    </JFXButton>
+                </HBox>
+
+                <Separator/>
+
+                <!-- Cart Items Table -->
+                <TableView fx:id="cartTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn text="Item" prefWidth="200">
+                            <cellFactory>
+                                <fx:reference source="cartItemCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Price" prefWidth="80">
+                            <cellFactory>
+                                <fx:reference source="cartPriceCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Qty" prefWidth="60">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="quantitySold"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Total" prefWidth="100">
+                            <cellFactory>
+                                <fx:reference source="cartTotalCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+
+                        <TableColumn text="" prefWidth="50">
+                            <cellFactory>
+                                <fx:reference source="removeCartItemCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+                    </columns>
+                    <placeholder>
+                        <Label text="Cart is empty"/>
+                    </placeholder>
+                </TableView>
+
+                <!-- Cart Summary -->
+                <VBox spacing="8" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5;">
+                    <HBox spacing="10" alignment="CENTER">
+                        <Label text="Subtotal:" prefWidth="100">
+                            <font>
+                                <Font size="13"/>
+                            </font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="subtotalLabel" text="Rs. 0.00">
+                            <font>
+                                <Font size="13"/>
+                            </font>
+                        </Label>
+                    </HBox>
+
+                    <HBox spacing="10" alignment="CENTER">
+                        <Label text="Discount:" prefWidth="100">
+                            <font>
+                                <Font size="13"/>
+                            </font>
+                        </Label>
+                        <JFXTextField fx:id="discountField"
+                                     promptText="0.00"
+                                     prefWidth="100"
+                                     onKeyReleased="#handleDiscountChange">
+                            <font>
+                                <Font size="12"/>
+                            </font>
+                        </JFXTextField>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="discountLabel" text="Rs. 0.00" textFill="#ef4444">
+                            <font>
+                                <Font size="13"/>
+                            </font>
+                        </Label>
+                    </HBox>
+
+                    <Separator/>
+
+                    <HBox spacing="10" alignment="CENTER">
+                        <Label text="TOTAL:" prefWidth="100" textFill="#10b981">
+                            <font>
+                                <Font name="System Bold" size="18"/>
+                            </font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="totalLabel" text="Rs. 0.00" textFill="#10b981">
+                            <font>
+                                <Font name="System Bold" size="20"/>
+                            </font>
+                        </Label>
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <!-- RIGHT PANEL: Checkout -->
+            <VBox spacing="15" style="-fx-padding: 15; -fx-background-color: white;" prefWidth="350">
+                <Label text="Checkout" textFill="#1f2937">
+                    <font>
+                        <Font name="System Bold" size="16"/>
+                    </font>
+                </Label>
+
+                <Separator/>
+
+                <!-- Customer Selection -->
+                <VBox spacing="8">
+                    <Label text="Customer (Optional)">
+                        <font>
+                            <Font name="System Bold" size="12"/>
+                        </font>
+                    </Label>
+
+                    <HBox spacing="5">
+                        <JFXComboBox fx:id="customerCombo"
+                                    promptText="Select or search customer"
+                                    prefWidth="220"
+                                    editable="true"/>
+
+                        <JFXButton text="+"
+                                  onAction="#handleQuickAddCustomer"
+                                  style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 3;"
+                                  prefWidth="40"
+                                  prefHeight="30">
+                            <font>
+                                <Font name="System Bold" size="14"/>
+                            </font>
+                        </JFXButton>
+                    </HBox>
+                </VBox>
+
+                <!-- Payment Type -->
+                <VBox spacing="8">
+                    <Label text="Payment Type">
+                        <font>
+                            <Font name="System Bold" size="12"/>
+                        </font>
+                    </Label>
+
+                    <JFXComboBox fx:id="paymentTypeCombo" prefWidth="270">
+                        <items>
+                            <javafx.collections.FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Cash"/>
+                                <String fx:value="Card"/>
+                                <String fx:value="Split"/>
+                            </javafx.collections.FXCollections>
+                        </items>
+                    </JFXComboBox>
+                </VBox>
+
+                <!-- Split Payment Details (shown when Split is selected) -->
+                <VBox fx:id="splitPaymentPanel" spacing="8" visible="false" managed="false">
+                    <Label text="Split Payment Details">
+                        <font>
+                            <Font size="11" fontStyle="italic"/>
+                        </font>
+                    </Label>
+
+                    <HBox spacing="5">
+                        <Label text="Cash:" prefWidth="50">
+                            <font>
+                                <Font size="11"/>
+                            </font>
+                        </Label>
+                        <JFXTextField fx:id="cashAmountField" promptText="0.00" prefWidth="100">
+                            <font>
+                                <Font size="11"/>
+                            </font>
+                        </JFXTextField>
+                    </HBox>
+
+                    <HBox spacing="5">
+                        <Label text="Card:" prefWidth="50">
+                            <font>
+                                <Font size="11"/>
+                            </font>
+                        </Label>
+                        <JFXTextField fx:id="cardAmountField" promptText="0.00" prefWidth="100">
+                            <font>
+                                <Font size="11"/>
+                            </font>
+                        </JFXTextField>
+                    </HBox>
+                </VBox>
+
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <!-- Checkout Button -->
+                <JFXButton text="✓ Complete Sale"
+                          onAction="#handleCheckout"
+                          style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-background-radius: 8;"
+                          maxWidth="Infinity"
+                          prefHeight="50">
+                    <font>
+                        <Font name="System Bold" size="16"/>
+                    </font>
+                </JFXButton>
+
+                <Label fx:id="checkoutMessageLabel"
+                       textFill="#ef4444"
+                       wrapText="true"
+                       visible="false"
+                       managed="false">
+                    <font>
+                        <Font size="11"/>
+                    </font>
+                </Label>
+            </VBox>
+
+        </HBox>
+    </center>
+
+</BorderPane>
