@@ -105,7 +105,7 @@ public class ReportService {
         Map<String, SalesCustomerSummary> salesByCustomer = sales.stream()
                 .filter(sale -> sale.getCustomer() != null)
                 .collect(Collectors.groupingBy(
-                        sale -> sale.getCustomer().getCustomerName(),
+                        sale -> sale.getCustomer().getName(),
                         Collectors.collectingAndThen(
                                 Collectors.toList(),
                                 customerSales -> {
@@ -113,7 +113,7 @@ public class ReportService {
                                             .map(Sale::getTotalAmount)
                                             .reduce(BigDecimal.ZERO, BigDecimal::add);
                                     return new SalesCustomerSummary(
-                                            customerSales.get(0).getCustomer().getCustomerName(),
+                                            customerSales.get(0).getCustomer().getName(),
                                             customerSales.get(0).getCustomer().getPhoneNumber(),
                                             customerSales.size(),
                                             customerTotal
@@ -265,7 +265,7 @@ public class ReportService {
                 .sorted((c1, c2) -> c2.getTotalPurchaseAmount().compareTo(c1.getTotalPurchaseAmount()))
                 .limit(limit)
                 .map(customer -> new TopCustomerReportItem(
-                        customer.getCustomerName(),
+                        customer.getName(),
                         customer.getPhoneNumber(),
                         customer.getVisitCount(),
                         customer.getTotalPurchaseAmount(),
