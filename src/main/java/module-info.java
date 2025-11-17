@@ -11,6 +11,7 @@ module com.chamathka.bathikpos {
     requires jakarta.validation;
     requires org.hibernate.orm.core;
     requires com.zaxxer.hikari;
+    requires org.hibernate.hikaricp;
     requires java.sql;
     requires java.naming;
 

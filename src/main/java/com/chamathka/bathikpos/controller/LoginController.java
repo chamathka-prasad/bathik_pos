@@ -3,13 +3,13 @@ package com.chamathka.bathikpos.controller;
 import com.chamathka.bathikpos.BatikPOSApplication;
 import com.chamathka.bathikpos.entity.User;
 import com.chamathka.bathikpos.service.AuthenticationService;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXPasswordField;
-import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.slf4j.Logger;
@@ -26,13 +26,13 @@ public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @FXML
-    private JFXTextField usernameField;
+    private TextField usernameField;
 
     @FXML
-    private JFXPasswordField passwordField;
+    private PasswordField passwordField;
 
     @FXML
-    private JFXButton loginButton;
+    private Button loginButton;
 
     @FXML
     private Label errorLabel;
