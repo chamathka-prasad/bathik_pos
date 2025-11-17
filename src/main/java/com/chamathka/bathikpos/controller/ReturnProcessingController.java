@@ -139,9 +139,9 @@ public class ReturnProcessingController {
 
         // Update sale details
         saleReceiptIdLabel.setText(sale.getReceiptId());
-        saleDateLabel.setText(sale.getSaleDate().format(DATE_FORMATTER));
+        saleDateLabel.setText(sale.getSaleTimestamp().format(DATE_FORMATTER));
         customerLabel.setText(sale.getCustomer() != null
-                ? sale.getCustomer().getCustomerName()
+                ? sale.getCustomer().getName()
                 : "Walk-in Customer");
         totalAmountLabel.setText(String.format("LKR %.2f", sale.getTotalAmount()));
 

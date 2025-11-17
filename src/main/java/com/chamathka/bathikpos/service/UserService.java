@@ -2,7 +2,7 @@ package com.chamathka.bathikpos.service;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.chamathka.bathikpos.dao.UserDAO;
-import com.chamathka.bathikpos.model.User;
+import com.chamathka.bathikpos.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
