@@ -11,11 +11,12 @@ module com.chamathka.bathikpos {
     requires jakarta.validation;
     requires org.hibernate.orm.core;
     requires com.zaxxer.hikari;
+    requires com.mysql.cj;
     requires java.sql;
     requires java.naming;
 
-    // Security
-    requires spring.security.crypto;
+    // Security (BCrypt)
+    requires bcrypt;
 
     // Logging
     requires org.slf4j;
