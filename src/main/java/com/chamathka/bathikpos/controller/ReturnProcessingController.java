@@ -93,7 +93,16 @@ public class ReturnProcessingController {
         String receiptId = receiptIdField.getText().trim();
 
         if (receiptId.isEmpty()) {
-            showWarning("Invalid Input", "Please enter a receipt ID");
+            showWarning("Invalid Input", "Please enter a sale ID");
+            return;
+        }
+
+        // Validate that it's a number
+        Long saleId;
+        try {
+            saleId = Long.parseLong(receiptId);
+        } catch (NumberFormatException e) {
+            showWarning("Invalid Input", "Sale ID must be a number");
             return;
         }
 
@@ -102,7 +111,7 @@ public class ReturnProcessingController {
         Task<Optional<Sale>> searchTask = new Task<>() {
             @Override
             protected Optional<Sale> call() {
-                return saleDAO.findByReceiptId(receiptId);
+                return saleDAO.findById(saleId);
             }
         };
 
@@ -138,7 +147,7 @@ public class ReturnProcessingController {
         returnItemsSection.setManaged(true);
 
         // Update sale details
-        saleReceiptIdLabel.setText(sale.getReceiptId());
+        saleReceiptIdLabel.setText(String.valueOf(sale.getSaleId()));
         saleDateLabel.setText(sale.getSaleTimestamp().format(DATE_FORMATTER));
         customerLabel.setText(sale.getCustomer() != null
                 ? sale.getCustomer().getName()
@@ -206,9 +215,9 @@ public class ReturnProcessingController {
         confirmation.setTitle("Confirm Return");
         confirmation.setHeaderText("Process Return?");
         confirmation.setContentText(String.format(
-                "Return %d item(s) from sale %s\n\nRefund Amount: LKR %.2f\n\nThis will restore stock. Continue?",
+                "Return %d item(s) from sale #%d\n\nRefund Amount: LKR %.2f\n\nThis will restore stock. Continue?",
                 selectedItems.size(),
-                currentSale.getReceiptId(),
+                currentSale.getSaleId(),
                 refundAmount
         ));
 
@@ -241,7 +250,7 @@ public class ReturnProcessingController {
                             refundAmount));
 
             logger.info("Return processed for sale: {}, Refund: {}",
-                    currentSale.getReceiptId(), refundAmount);
+                    currentSale.getSaleId(), refundAmount);
 
             // Clear the form
             receiptIdField.clear();

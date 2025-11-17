@@ -44,7 +44,7 @@
 
             <!-- Sale Search Section -->
             <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;">
-                <Label text="Search Sale by Receipt ID" textFill="#1f2937">
+                <Label text="Search Sale by Sale ID" textFill="#1f2937">
                     <font>
                         <Font name="System Bold" size="16"/>
                     </font>
@@ -52,7 +52,7 @@
 
                 <HBox spacing="15" alignment="CENTER_LEFT">
                     <JFXTextField fx:id="receiptIdField"
-                                 promptText="Enter Receipt ID (e.g., RCP-20250117-1)"
+                                 promptText="Enter Sale ID (e.g., 1, 2, 3)"
                                  prefWidth="300">
                         <font>
                             <Font size="13"/>
@@ -98,7 +98,7 @@
                     </columnConstraints>
 
                     <VBox spacing="3" GridPane.columnIndex="0">
-                        <Label text="Receipt ID:" textFill="#6b7280">
+                        <Label text="Sale ID:" textFill="#6b7280">
                             <font>
                                 <Font size="11"/>
                             </font>
