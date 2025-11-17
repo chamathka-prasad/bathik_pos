@@ -182,7 +182,7 @@ public class ReportService {
                 totalProfit = totalProfit.add(profit);
 
                 profitItems.add(new ProfitReportItem(
-                        sale.getSaleDate(),
+                        sale.getSaleTimestamp(),
                         variant.getProduct().getName(),
                         variant.getItemCode(),
                         variant.getAttributeSize(),
