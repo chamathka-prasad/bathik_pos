@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chamathka.bathikpos.controller.MainDashboardController"
+            prefWidth="1200"
+            prefHeight="700"
+            style="-fx-background-color: #f5f5f5;">
+
+    <!-- Top Bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT"
+              spacing="20"
+              style="-fx-background-color: #6366f1; -fx-padding: 15 20;">
+
+            <Label text="🎨 Batik POS System" textFill="white">
+                <font>
+                    <Font name="System Bold" size="20"/>
+                </font>
+            </Label>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- User Info -->
+            <HBox alignment="CENTER" spacing="10">
+                <Label fx:id="userInfoLabel" textFill="white">
+                    <font>
+                        <Font name="System Bold" size="14"/>
+                    </font>
+                </Label>
+                <Label text="|" textFill="white">
+                    <font>
+                        <Font size="14"/>
+                    </font>
+                </Label>
+                <Label fx:id="roleLabel" textFill="#a5b4fc">
+                    <font>
+                        <Font size="12"/>
+                    </font>
+                </Label>
+            </HBox>
+
+            <!-- Logout Button -->
+            <JFXButton text="Logout"
+                      onAction="#handleLogout"
+                      textFill="white"
+                      style="-fx-background-color: #4338ca; -fx-background-radius: 5;"
+                      prefHeight="35"
+                      prefWidth="80">
+                <font>
+                    <Font name="System Bold" size="12"/>
+                </font>
+            </JFXButton>
+        </HBox>
+    </top>
+
+    <!-- Left Sidebar - Navigation Menu -->
+    <left>
+        <VBox spacing="5"
+              style="-fx-background-color: white; -fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);"
+              prefWidth="250">
+
+            <!-- POS Section -->
+            <Label text="SALES" style="-fx-text-fill: #6b7280; -fx-font-size: 11px; -fx-font-weight: bold;">
+                <padding>
+                    <Insets top="10" bottom="5"/>
+                </padding>
+            </Label>
+
+            <JFXButton fx:id="btnPOS"
+                      text="💰 Point of Sale"
+                      onAction="#handleOpenPOS"
+                      alignment="BASELINE_LEFT"
+                      prefWidth="220"
+                      prefHeight="40"
+                      style="-fx-background-color: transparent; -fx-text-fill: #1f2937;">
+                <font>
+                    <Font size="14"/>
+                </font>
+            </JFXButton>
+
+            <!-- Customer Management -->
+            <JFXButton fx:id="btnCustomers"
+                      text="👥 Customers"
+                      onAction="#handleOpenCustomers"
+                      alignment="BASELINE_LEFT"
+                      prefWidth="220"
+                      prefHeight="40"
+                      style="-fx-background-color: transparent; -fx-text-fill: #1f2937;">
+                <font>
+                    <Font size="14"/>
+                </font>
+            </JFXButton>
+
+            <!-- Separator -->
+            <Separator/>
+
+            <!-- ADMIN-ONLY SECTION -->
+            <VBox fx:id="adminSection" spacing="5" visible="false" managed="false">
+                <Label text="INVENTORY" style="-fx-text-fill: #6b7280; -fx-font-size: 11px; -fx-font-weight: bold;">
+                    <padding>
+                        <Insets top="10" bottom="5"/>
+                    </padding>
+                </Label>
+
+                <JFXButton fx:id="btnProducts"
+                          text="📦 Products"
+                          onAction="#handleOpenProducts"
+                          alignment="BASELINE_LEFT"
+                          prefWidth="220"
+                          prefHeight="40"
+                          style="-fx-background-color: transparent; -fx-text-fill: #1f2937;">
+                    <font>
+                        <Font size="14"/>
+                    </font>
+                </JFXButton>
+
+                <JFXButton fx:id="btnSuppliers"
+                          text="🏭 Suppliers"
+                          onAction="#handleOpenSuppliers"
+                          alignment="BASELINE_LEFT"
+                          prefWidth="220"
+                          prefHeight="40"
+                          style="-fx-background-color: transparent; -fx-text-fill: #1f2937;">
+                    <font>
+                        <Font size="14"/>
+                    </font>
+                </JFXButton>
+
+                <JFXButton fx:id="btnGRN"
+                          text="📥 Goods Received (GRN)"
+                          onAction="#handleOpenGRN"
+                          alignment="BASELINE_LEFT"
+                          prefWidth="220"
+                          prefHeight="40"
+                          style="-fx-background-color: transparent; -fx-text-fill: #1f2937;">
+                    <font>
+                        <Font size="14"/>
+                    </font>
+                </JFXButton>
+
+                <Separator/>
+
+                <Label text="REPORTS" style="-fx-text-fill: #6b7280; -fx-font-size: 11px; -fx-font-weight: bold;">
+                    <padding>
+                        <Insets top="10" bottom="5"/>
+                    </padding>
+                </Label>
+
+                <JFXButton fx:id="btnReports"
+                          text="📊 Sales Reports"
+                          onAction="#handleOpenReports"
+                          alignment="BASELINE_LEFT"
+                          prefWidth="220"
+                          prefHeight="40"
+                          style="-fx-background-color: transparent; -fx-text-fill: #1f2937;">
+                    <font>
+                        <Font size="14"/>
+                    </font>
+                </JFXButton>
+
+                <JFXButton fx:id="btnReturns"
+                          text="↩️ Process Returns"
+                          onAction="#handleOpenReturns"
+                          alignment="BASELINE_LEFT"
+                          prefWidth="220"
+                          prefHeight="40"
+                          style="-fx-background-color: transparent; -fx-text-fill: #1f2937;">
+                    <font>
+                        <Font size="14"/>
+                    </font>
+                </JFXButton>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Version Info -->
+            <Label text="Version 1.0" style="-fx-text-fill: #9ca3af; -fx-font-size: 10px;">
+                <padding>
+                    <Insets top="10"/>
+                </padding>
+            </Label>
+        </VBox>
+    </left>
+
+    <!-- Center - Content Area -->
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-background-color: #f5f5f5;">
+            <!-- Welcome Screen -->
+            <VBox alignment="CENTER" spacing="20" fx:id="welcomeScreen">
+                <Label text="Welcome to Batik POS System" textFill="#1f2937">
+                    <font>
+                        <Font name="System Bold" size="28"/>
+                    </font>
+                </Label>
+                <Label fx:id="welcomeMessage" textFill="#6b7280">
+                    <font>
+                        <Font size="16"/>
+                    </font>
+                </Label>
+
+                <!-- Quick Stats Cards (ADMIN only) -->
+                <HBox fx:id="statsContainer"
+                      spacing="20"
+                      alignment="CENTER"
+                      visible="false"
+                      managed="false">
+                    <VBox alignment="CENTER"
+                          spacing="10"
+                          style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);"
+                          prefWidth="200"
+                          prefHeight="150">
+                        <Label text="📦" style="-fx-font-size: 32px;"/>
+                        <Label fx:id="lblTotalProducts" text="0" textFill="#1f2937">
+                            <font>
+                                <Font name="System Bold" size="24"/>
+                            </font>
+                        </Label>
+                        <Label text="Total Products" textFill="#6b7280">
+                            <font>
+                                <Font size="12"/>
+                            </font>
+                        </Label>
+                    </VBox>
+
+                    <VBox alignment="CENTER"
+                          spacing="10"
+                          style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);"
+                          prefWidth="200"
+                          prefHeight="150">
+                        <Label text="⚠️" style="-fx-font-size: 32px;"/>
+                        <Label fx:id="lblLowStock" text="0" textFill="#ef4444">
+                            <font>
+                                <Font name="System Bold" size="24"/>
+                            </font>
+                        </Label>
+                        <Label text="Low Stock Items" textFill="#6b7280">
+                            <font>
+                                <Font size="12"/>
+                            </font>
+                        </Label>
+                    </VBox>
+
+                    <VBox alignment="CENTER"
+                          spacing="10"
+                          style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);"
+                          prefWidth="200"
+                          prefHeight="150">
+                        <Label text="👥" style="-fx-font-size: 32px;"/>
+                        <Label fx:id="lblTotalCustomers" text="0" textFill="#1f2937">
+                            <font>
+                                <Font name="System Bold" size="24"/>
+                            </font>
+                        </Label>
+                        <Label text="Total Customers" textFill="#6b7280">
+                            <font>
+                                <Font size="12"/>
+                            </font>
+                        </Label>
+                    </VBox>
+                </HBox>
+
+                <Label text="Select an option from the menu to get started" textFill="#9ca3af">
+                    <font>
+                        <Font size="14"/>
+                    </font>
+                </Label>
+            </VBox>
+        </StackPane>
+    </center>
+
+</BorderPane>

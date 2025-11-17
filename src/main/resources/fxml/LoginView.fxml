@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.chamathka.bathikpos.controller.LoginController"
+      alignment="CENTER"
+      spacing="20"
+      styleClass="login-container"
+      prefWidth="450"
+      prefHeight="550">
+
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
+
+    <!-- Header -->
+    <VBox alignment="CENTER" spacing="10">
+        <Text text="🎨 Batik POS System" styleClass="app-title">
+            <font>
+                <Font name="System Bold" size="32"/>
+            </font>
+        </Text>
+        <Text text="Point of Sale Management" styleClass="app-subtitle">
+            <font>
+                <Font size="14"/>
+            </font>
+        </Text>
+    </VBox>
+
+    <!-- Spacer -->
+    <Region VBox.vgrow="ALWAYS" minHeight="20" maxHeight="40"/>
+
+    <!-- Login Form -->
+    <VBox spacing="15" styleClass="login-form" maxWidth="350">
+        <padding>
+            <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
+
+        <!-- Username Field -->
+        <VBox spacing="5">
+            <Label text="Username:" styleClass="field-label">
+                <font>
+                    <Font name="System Bold" size="12"/>
+                </font>
+            </Label>
+            <TextField fx:id="usernameField"
+                      promptText="Enter username"
+                      styleClass="text-field"
+                      onAction="#handleLogin">
+                <font>
+                    <Font size="14"/>
+                </font>
+            </TextField>
+        </VBox>
+
+        <!-- Password Field -->
+        <VBox spacing="5">
+            <Label text="Password:" styleClass="field-label">
+                <font>
+                    <Font name="System Bold" size="12"/>
+                </font>
+            </Label>
+            <PasswordField fx:id="passwordField"
+                          promptText="Enter password"
+                          styleClass="text-field"
+                          onAction="#handleLogin">
+                <font>
+                    <Font size="14"/>
+                </font>
+            </PasswordField>
+        </VBox>
+
+        <!-- Error Message -->
+        <Label fx:id="errorLabel"
+               textFill="red"
+               wrapText="true"
+               visible="false"
+               managed="false">
+            <font>
+                <Font size="12"/>
+            </font>
+        </Label>
+
+        <!-- Login Button -->
+        <Button fx:id="loginButton"
+                text="Login"
+                defaultButton="true"
+                onAction="#handleLogin"
+                styleClass="primary-button"
+                maxWidth="Infinity"
+                prefHeight="40">
+            <font>
+                <Font name="System Bold" size="14"/>
+            </font>
+        </Button>
+
+        <!-- Progress Indicator -->
+        <ProgressIndicator fx:id="progressIndicator"
+                          visible="false"
+                          managed="false"
+                          maxWidth="50"
+                          maxHeight="50">
+            <VBox.margin>
+                <Insets top="10"/>
+            </VBox.margin>
+        </ProgressIndicator>
+    </VBox>
+
+    <!-- Spacer -->
+    <Region VBox.vgrow="ALWAYS" minHeight="20" maxHeight="40"/>
+
+    <!-- Footer Info -->
+    <VBox alignment="CENTER" spacing="5">
+        <Text text="Default Credentials:" styleClass="footer-text">
+            <font>
+                <Font name="System Bold" size="11"/>
+            </font>
+        </Text>
+        <Text text="Admin: admin / admin123" styleClass="footer-text">
+            <font>
+                <Font size="10"/>
+            </font>
+        </Text>
+        <Text text="Cashier: cashier / cashier123" styleClass="footer-text">
+            <font>
+                <Font size="10"/>
+            </font>
+        </Text>
+        <Text text="Version 1.0 | © 2025" styleClass="footer-text">
+            <font>
+                <Font size="9"/>
+            </font>
+            <VBox.margin>
+                <Insets top="10"/>
+            </VBox.margin>
+        </Text>
+    </VBox>
+
+</VBox>

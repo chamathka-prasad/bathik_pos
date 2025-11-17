@@ -1,29 +1,25 @@
 package com.chamathka.bathikpos.controller;
 
-import com.chamathka.bathikpos.model.User;
-import com.chamathka.bathikpos.service.UserService;
-import com.chamathka.bathikpos.util.SessionManager;
+import com.chamathka.bathikpos.BatikPOSApplication;
+import com.chamathka.bathikpos.entity.User;
+import com.chamathka.bathikpos.service.AuthenticationService;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.Optional;
-
 /**
- * Controller for the Login screen
- * Handles user authentication and navigation to main dashboard
+ * Controller for the Login screen.
+ * Handles user authentication and navigation to main dashboard.
+ *
+ * This controller contains NO business logic - it only calls AuthenticationService.
  */
 public class LoginController {
 
@@ -41,10 +37,10 @@ public class LoginController {
     @FXML
     private Label errorLabel;
 
-    private final UserService userService;
+    private final AuthenticationService authService;
 
     public LoginController() {
-        this.userService = new UserService();
+        this.authService = new AuthenticationService();
     }
 
     @FXML
@@ -75,7 +71,8 @@ public class LoginController {
     }
 
     /**
-     * Handle login button click
+     * Handle login button click.
+     * Performs authentication in a background thread to keep UI responsive.
      */
     @FXML
     public void handleLogin() {
@@ -104,42 +101,39 @@ public class LoginController {
         loginButton.setText("Logging in...");
 
         // Perform authentication in background thread
-        new Thread(() -> {
-            try {
-                Optional<User> userOptional = userService.authenticate(username, password);
-
-                Platform.runLater(() -> {
-                    if (userOptional.isPresent()) {
-                        User user = userOptional.get();
-                        logger.info("Login successful for user: {} (Role: {})",
-                                user.getUsername(), user.getRole());
-
-                        // Set the current user in session
-                        SessionManager.getInstance().setCurrentUser(user);
-
-                        // Navigate to main dashboard
-                        navigateToDashboard();
-                    } else {
-                        logger.warn("Login failed for username: {}", username);
-                        showError("Invalid username or password");
-                        passwordField.clear();
-                        passwordField.requestFocus();
-                    }
-
-                    // Re-enable login button
-                    loginButton.setDisable(false);
-                    loginButton.setText("LOGIN");
-                });
-
-            } catch (Exception e) {
-                logger.error("Error during login process", e);
-                Platform.runLater(() -> {
-                    showError("An error occurred during login. Please try again.");
-                    loginButton.setDisable(false);
-                    loginButton.setText("LOGIN");
-                });
+        Task<User> loginTask = new Task<>() {
+            @Override
+            protected User call() {
+                return authService.login(username, password);
             }
-        }).start();
+        };
+
+        loginTask.setOnSucceeded(event -> {
+            User user = loginTask.getValue();
+            loginButton.setDisable(false);
+            loginButton.setText("LOGIN");
+
+            if (user != null) {
+                logger.info("Login successful for user: {} ({})", user.getUsername(), user.getRole());
+                navigateToDashboard();
+            } else {
+                logger.warn("Login failed for username: {}", username);
+                showError("Invalid username or password");
+                passwordField.clear();
+                passwordField.requestFocus();
+            }
+        });
+
+        loginTask.setOnFailed(event -> {
+            loginButton.setDisable(false);
+            loginButton.setText("LOGIN");
+            Throwable error = loginTask.getException();
+            logger.error("Login error", error);
+            showError("Login failed: " + error.getMessage());
+        });
+
+        // Start the background task
+        new Thread(loginTask).start();
     }
 
     /**
@@ -151,30 +145,16 @@ public class LoginController {
     }
 
     /**
-     * Navigate to the main dashboard after successful login
+     * Navigate to the main dashboard after successful login.
      */
     private void navigateToDashboard() {
         try {
-            // Load the main dashboard view
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/chamathka/bathikpos/MainDashboardView.fxml")
-            );
-            Parent root = loader.load();
-
-            // Get the current stage
-            Stage stage = (Stage) loginButton.getScene().getWindow();
-
-            // Create and set the new scene
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Batik POS - Dashboard");
-            stage.setMaximized(true);
-
+            BatikPOSApplication.navigateTo("/fxml/MainDashboard.fxml", "Batik POS - Dashboard");
             logger.info("Navigated to main dashboard");
-
-        } catch (IOException e) {
-            logger.error("Error loading main dashboard view", e);
-            showError("Error loading dashboard. Please contact support.");
+        } catch (Exception e) {
+            logger.error("Failed to navigate to dashboard", e);
+            showError("Failed to load dashboard: " + e.getMessage());
+            loginButton.setDisable(false);
         }
     }
 
