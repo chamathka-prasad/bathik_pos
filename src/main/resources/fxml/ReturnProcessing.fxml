@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chamathka.bathikpos.controller.ReturnProcessingController"
+            prefWidth="1100"
+            prefHeight="700"
+            style="-fx-background-color: #f5f5f5;">
+
+    <!-- Top Bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: white; -fx-padding: 15 20;">
+            <JFXButton text="← Back to Dashboard"
+                      onAction="#handleBackToDashboard"
+                      style="-fx-background-color: #e0e7ff; -fx-text-fill: #4338ca; -fx-background-radius: 5;">
+                <font>
+                    <Font name="System Bold" size="12"/>
+                </font>
+            </JFXButton>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label text="Return Processing" textFill="#1f2937">
+                <font>
+                    <Font name="System Bold" size="20"/>
+                </font>
+            </Label>
+
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </top>
+
+    <!-- Center - Return Processing -->
+    <center>
+        <VBox spacing="20" style="-fx-padding: 20;">
+
+            <!-- Sale Search Section -->
+            <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;">
+                <Label text="Search Sale by Receipt ID" textFill="#1f2937">
+                    <font>
+                        <Font name="System Bold" size="16"/>
+                    </font>
+                </Label>
+
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <JFXTextField fx:id="receiptIdField"
+                                 promptText="Enter Receipt ID (e.g., RCP-20250117-1)"
+                                 prefWidth="300">
+                        <font>
+                            <Font size="13"/>
+                        </font>
+                    </JFXTextField>
+
+                    <JFXButton text="Search Sale"
+                              onAction="#handleSearchSale"
+                              style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 5;"
+                              prefHeight="35">
+                        <font>
+                            <Font name="System Bold" size="13"/>
+                        </font>
+                    </JFXButton>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Label fx:id="searchStatusLabel" text="" textFill="#6b7280">
+                        <font>
+                            <Font size="13"/>
+                        </font>
+                    </Label>
+                </HBox>
+            </VBox>
+
+            <!-- Sale Details Section -->
+            <VBox fx:id="saleDetailsSection" spacing="10"
+                  style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;"
+                  visible="false" managed="false">
+
+                <Label text="Sale Details" textFill="#1f2937">
+                    <font>
+                        <Font name="System Bold" size="16"/>
+                    </font>
+                </Label>
+
+                <GridPane hgap="20" vgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="25"/>
+                        <ColumnConstraints percentWidth="25"/>
+                        <ColumnConstraints percentWidth="25"/>
+                        <ColumnConstraints percentWidth="25"/>
+                    </columnConstraints>
+
+                    <VBox spacing="3" GridPane.columnIndex="0">
+                        <Label text="Receipt ID:" textFill="#6b7280">
+                            <font>
+                                <Font size="11"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="saleReceiptIdLabel" text="-" textFill="#1f2937">
+                            <font>
+                                <Font name="System Bold" size="13"/>
+                            </font>
+                        </Label>
+                    </VBox>
+
+                    <VBox spacing="3" GridPane.columnIndex="1">
+                        <Label text="Date:" textFill="#6b7280">
+                            <font>
+                                <Font size="11"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="saleDateLabel" text="-" textFill="#1f2937">
+                            <font>
+                                <Font name="System Bold" size="13"/>
+                            </font>
+                        </Label>
+                    </VBox>
+
+                    <VBox spacing="3" GridPane.columnIndex="2">
+                        <Label text="Customer:" textFill="#6b7280">
+                            <font>
+                                <Font size="11"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="customerLabel" text="-" textFill="#1f2937">
+                            <font>
+                                <Font name="System Bold" size="13"/>
+                            </font>
+                        </Label>
+                    </VBox>
+
+                    <VBox spacing="3" GridPane.columnIndex="3">
+                        <Label text="Total Amount:" textFill="#6b7280">
+                            <font>
+                                <Font size="11"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="totalAmountLabel" text="LKR 0.00" textFill="#059669">
+                            <font>
+                                <Font name="System Bold" size="15"/>
+                            </font>
+                        </Label>
+                    </VBox>
+                </GridPane>
+            </VBox>
+
+            <!-- Items to Return Section -->
+            <VBox fx:id="returnItemsSection" spacing="10" VBox.vgrow="ALWAYS"
+                  visible="false" managed="false">
+
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <Label text="Select Items to Return" textFill="#1f2937">
+                        <font>
+                            <Font name="System Bold" size="16"/>
+                        </font>
+                    </Label>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Label text="Note: Select items by checking the checkbox and enter return quantity"
+                           textFill="#6b7280">
+                        <font>
+                            <Font size="12"/>
+                        </font>
+                    </Label>
+                </HBox>
+
+                <TableView fx:id="saleItemsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn text="Select" prefWidth="60" style="-fx-alignment: CENTER;">
+                            <cellFactory>
+                                <fx:reference source="selectCheckBoxCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Product" prefWidth="250">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="productName"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn text="SKU" prefWidth="120">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="sku"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Size" prefWidth="80">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="size"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Color" prefWidth="100">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="color"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Qty Sold" prefWidth="90" style="-fx-alignment: CENTER;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="quantitySold"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Price" prefWidth="100" style="-fx-alignment: CENTER_RIGHT;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="priceAtSale"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Return Qty" prefWidth="100" style="-fx-alignment: CENTER;">
+                            <cellFactory>
+                                <fx:reference source="returnQuantityCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Subtotal" prefWidth="120" style="-fx-alignment: CENTER_RIGHT;">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="subtotal"/>
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+
+                <!-- Return Summary and Actions -->
+                <HBox spacing="15" alignment="CENTER_RIGHT" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Return Details:" textFill="#6b7280">
+                            <font>
+                                <Font size="12"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="returnSummaryLabel" text="No items selected for return" textFill="#1f2937">
+                            <font>
+                                <Font size="13"/>
+                            </font>
+                        </Label>
+                    </VBox>
+
+                    <VBox spacing="5" alignment="CENTER_RIGHT">
+                        <Label text="Refund Amount:" textFill="#6b7280">
+                            <font>
+                                <Font size="12"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="refundAmountLabel" text="LKR 0.00" textFill="#ef4444">
+                            <font>
+                                <Font name="System Bold" size="20"/>
+                            </font>
+                        </Label>
+                    </VBox>
+
+                    <VBox spacing="10" alignment="CENTER_RIGHT">
+                        <JFXButton text="Process Return"
+                                  fx:id="processReturnButton"
+                                  onAction="#handleProcessReturn"
+                                  style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 5;"
+                                  prefWidth="150"
+                                  prefHeight="40"
+                                  disable="true">
+                            <font>
+                                <Font name="System Bold" size="14"/>
+                            </font>
+                        </JFXButton>
+
+                        <JFXButton text="Clear Selection"
+                                  onAction="#handleClearSelection"
+                                  style="-fx-background-color: #9ca3af; -fx-text-fill: white; -fx-background-radius: 5;"
+                                  prefWidth="150">
+                            <font>
+                                <Font name="System Bold" size="12"/>
+                            </font>
+                        </JFXButton>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+        </VBox>
+    </center>
+</BorderPane>
