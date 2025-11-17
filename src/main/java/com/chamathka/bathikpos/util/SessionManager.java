@@ -1,10 +1,11 @@
 package com.chamathka.bathikpos.util;
 
-import com.chamathka.bathikpos.model.User;
+import com.chamathka.bathikpos.entity.User;
 
 /**
- * Singleton class to manage the current user session
- * Keeps track of the logged-in user throughout the application lifecycle
+ * Singleton class to manage the current user session.
+ * Keeps track of the logged-in user throughout the application lifecycle.
+ * Provides security methods to enforce role-based access control at the service layer.
  */
 public class SessionManager {
 
@@ -87,5 +88,26 @@ public class SessionManager {
      */
     public void logout() {
         this.currentUser = null;
+    }
+
+    /**
+     * Require admin access. Throws exception if current user is not an admin.
+     * This method enforces authorization at the service layer as per SRS requirements.
+     * @throws SecurityException if current user is not an admin
+     */
+    public void requireAdmin() {
+        if (!isAdmin()) {
+            throw new SecurityException("Admin access required. Current user role: " + getCurrentUserRole());
+        }
+    }
+
+    /**
+     * Require authentication. Throws exception if no user is logged in.
+     * @throws SecurityException if no user is logged in
+     */
+    public void requireAuthentication() {
+        if (!isLoggedIn()) {
+            throw new SecurityException("Authentication required. No user is logged in.");
+        }
     }
 }
