@@ -261,16 +261,16 @@ public class ReportService {
         List<Customer> allCustomers = customerDAO.findAll();
 
         return allCustomers.stream()
-                .filter(customer -> customer.getTotalPurchaseAmount().compareTo(BigDecimal.ZERO) > 0)
-                .sorted((c1, c2) -> c2.getTotalPurchaseAmount().compareTo(c1.getTotalPurchaseAmount()))
+                .filter(customer -> customer.getTotalPurchases().compareTo(BigDecimal.ZERO) > 0)
+                .sorted((c1, c2) -> c2.getTotalPurchases().compareTo(c1.getTotalPurchases()))
                 .limit(limit)
                 .map(customer -> new TopCustomerReportItem(
                         customer.getName(),
                         customer.getPhoneNumber(),
                         customer.getVisitCount(),
-                        customer.getTotalPurchaseAmount(),
+                        customer.getTotalPurchases(),
                         customer.getVisitCount() > 0
-                                ? customer.getTotalPurchaseAmount()
+                                ? customer.getTotalPurchases()
                                     .divide(BigDecimal.valueOf(customer.getVisitCount()), 2, BigDecimal.ROUND_HALF_UP)
                                 : BigDecimal.ZERO
                 ))
