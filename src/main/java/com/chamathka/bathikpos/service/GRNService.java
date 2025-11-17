@@ -139,6 +139,16 @@ public class GRNService {
     }
 
     /**
+     * Get GRNs by status.
+     * @param status The status ("PENDING" or "CONFIRMED")
+     * @return List of GRNs
+     */
+    public List<GRN> findByStatus(String status) {
+        sessionManager.requireAdmin();
+        return grnDAO.findByStatus(status);
+    }
+
+    /**
      * Get GRNs within a date range.
      * @param startDate Start date
      * @param endDate End date

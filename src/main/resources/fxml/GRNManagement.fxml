@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.chamathka.bathikpos.controller.GRNManagementController"
+            prefWidth="1200"
+            prefHeight="700"
+            style="-fx-background-color: #f5f5f5;">
+
+    <!-- Top Bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: white; -fx-padding: 15 20;">
+            <JFXButton text="← Back to Dashboard"
+                      onAction="#handleBackToDashboard"
+                      style="-fx-background-color: #e0e7ff; -fx-text-fill: #4338ca; -fx-background-radius: 5;">
+                <font>
+                    <Font name="System Bold" size="12"/>
+                </font>
+            </JFXButton>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label text="Goods Received Note (GRN) Management" textFill="#1f2937">
+                <font>
+                    <Font name="System Bold" size="20"/>
+                </font>
+            </Label>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <JFXButton text="+ New GRN"
+                      onAction="#handleNewGRN"
+                      style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-background-radius: 5;"
+                      prefHeight="35">
+                <font>
+                    <Font name="System Bold" size="13"/>
+                </font>
+            </JFXButton>
+        </HBox>
+    </top>
+
+    <!-- Center - Split Pane -->
+    <center>
+        <SplitPane dividerPositions="0.5" style="-fx-background-color: #f5f5f5;">
+
+            <!-- Left: GRN List -->
+            <VBox spacing="10" style="-fx-padding: 20;">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="GRN History" textFill="#1f2937">
+                        <font>
+                            <Font name="System Bold" size="16"/>
+                        </font>
+                    </Label>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <JFXComboBox fx:id="statusFilter" promptText="Filter by Status" onAction="#handleFilterChange">
+                        <items>
+                            <javafx.collections.FXCollections fx:factory="observableArrayList">
+                                <String fx:value="All"/>
+                                <String fx:value="PENDING"/>
+                                <String fx:value="CONFIRMED"/>
+                            </javafx.collections.FXCollections>
+                        </items>
+                    </JFXComboBox>
+                </HBox>
+
+                <TableView fx:id="grnTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn text="GRN ID" prefWidth="80">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="grnId"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Date" prefWidth="150">
+                            <cellFactory>
+                                <fx:reference source="dateCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Supplier" prefWidth="180">
+                            <cellFactory>
+                                <fx:reference source="supplierCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Invoice No" prefWidth="120">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="supplierInvoiceNo"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Total Cost" prefWidth="120">
+                            <cellFactory>
+                                <fx:reference source="totalCostCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Status" prefWidth="100">
+                            <cellFactory>
+                                <fx:reference source="statusCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+
+                <Label fx:id="statusLabel" textFill="#6b7280">
+                    <font>
+                        <Font size="12"/>
+                    </font>
+                </Label>
+            </VBox>
+
+            <!-- Right: GRN Details/Creation -->
+            <VBox fx:id="grnFormPanel" spacing="15" style="-fx-padding: 20; -fx-background-color: white;" visible="false" managed="false">
+                <Label text="Create New GRN" textFill="#1f2937">
+                    <font>
+                        <Font name="System Bold" size="18"/>
+                    </font>
+                </Label>
+
+                <Separator/>
+
+                <!-- GRN Header Info -->
+                <GridPane hgap="10" vgap="15">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="30"/>
+                        <ColumnConstraints percentWidth="70"/>
+                    </columnConstraints>
+
+                    <Label text="Supplier:" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <font>
+                            <Font name="System Bold" size="12"/>
+                        </font>
+                    </Label>
+                    <JFXComboBox fx:id="supplierCombo" promptText="Select Supplier" prefWidth="300" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <Label text="Invoice No:" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <font>
+                            <Font name="System Bold" size="12"/>
+                        </font>
+                    </Label>
+                    <JFXTextField fx:id="invoiceField" promptText="Supplier Invoice Number" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                </GridPane>
+
+                <Separator/>
+
+                <!-- GRN Items -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Items" textFill="#1f2937">
+                        <font>
+                            <Font name="System Bold" size="14"/>
+                        </font>
+                    </Label>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <JFXButton text="+ Add Item"
+                              onAction="#handleAddGRNItem"
+                              style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 3;">
+                        <font>
+                            <Font size="11"/>
+                        </font>
+                    </JFXButton>
+                </HBox>
+
+                <TableView fx:id="grnItemsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn text="Product Variant" prefWidth="200">
+                            <cellFactory>
+                                <fx:reference source="variantCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+
+                        <TableColumn text="SKU" prefWidth="120">
+                            <cellFactory>
+                                <fx:reference source="skuCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Quantity" prefWidth="100">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="quantityReceived"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Cost Price" prefWidth="120">
+                            <cellFactory>
+                                <fx:reference source="costPriceCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Total" prefWidth="120">
+                            <cellFactory>
+                                <fx:reference source="itemTotalCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+
+                        <TableColumn text="" prefWidth="80">
+                            <cellFactory>
+                                <fx:reference source="removeItemCellFactory"/>
+                            </cellFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+
+                <!-- Total -->
+                <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10;">
+                    <Label text="Total Cost:" textFill="#1f2937">
+                        <font>
+                            <Font name="System Bold" size="16"/>
+                        </font>
+                    </Label>
+                    <Label fx:id="totalCostLabel" text="Rs. 0.00" textFill="#10b981">
+                        <font>
+                            <Font name="System Bold" size="18"/>
+                        </font>
+                    </Label>
+                </HBox>
+
+                <!-- Action Buttons -->
+                <HBox spacing="10" alignment="CENTER">
+                    <JFXButton text="Cancel"
+                              onAction="#handleCancelGRN"
+                              style="-fx-background-color: #e5e7eb; -fx-text-fill: #1f2937; -fx-background-radius: 5;"
+                              prefWidth="120"
+                              prefHeight="35">
+                        <font>
+                            <Font name="System Bold" size="13"/>
+                        </font>
+                    </JFXButton>
+
+                    <JFXButton text="✓ Confirm GRN"
+                              onAction="#handleConfirmGRN"
+                              style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-background-radius: 5;"
+                              prefWidth="150"
+                              prefHeight="35">
+                        <font>
+                            <Font name="System Bold" size="13"/>
+                        </font>
+                    </JFXButton>
+                </HBox>
+            </VBox>
+
+        </SplitPane>
+    </center>
+
+</BorderPane>
