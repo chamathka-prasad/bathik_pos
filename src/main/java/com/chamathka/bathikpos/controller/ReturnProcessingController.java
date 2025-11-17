@@ -231,15 +231,18 @@ public class ReturnProcessingController {
         Task<Void> returnTask = new Task<>() {
             @Override
             protected Void call() {
-                // Create map of variant ID to return quantity
-                Map<Long, Integer> returnQuantities = selectedItems.stream()
-                        .collect(Collectors.toMap(
-                                row -> row.getSaleItem().getVariant().getVariantId(),
-                                ReturnItemRow::getReturnQuantity
-                        ));
+                // Create list of SaleItems with return quantities
+                List<SaleItem> returnedItems = selectedItems.stream()
+                        .map(row -> {
+                            SaleItem returnItem = new SaleItem();
+                            returnItem.setVariant(row.getSaleItem().getVariant());
+                            returnItem.setQuantitySold(row.getReturnQuantity()); // Use return quantity
+                            return returnItem;
+                        })
+                        .collect(Collectors.toList());
 
                 // Process return using service (ATOMIC transaction)
-                returnService.processReturn(currentSale.getSaleId(), returnQuantities);
+                returnService.processReturn(currentSale.getSaleId(), returnedItems);
                 return null;
             }
         };
